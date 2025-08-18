@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        h1 {
+            color: #1DA1F2; /* Twitter blue */
+            text-align: center;
+        }
+        
+        .container {
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 100px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        
+        button {
+            background-color: #1DA1F2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #0c85d0;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .positive {
+            background-color: #e3f7e3;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .negative {
+            background-color: #ffebee;
+            border-left: 5px solid #F44336;
+        }
+        
+        .neutral {
+            background-color: #f5f5f5;
+            border-left: 5px solid #9E9E9E;
+        }
+        
+        .score-bar {
+            height: 20px;
+            margin: 5px 0;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .score-label {
+            display: inline-block;
+            width: 80px;
+        }
+        
+        .score-value {
+            position: absolute;
+            right: 5px;
+            color: #333;
+        }
+        
+        .positive-bar {
+            background-color: #4CAF50;
+        }
+        
+        .negative-bar {
+            background-color: #F44336;
+        }
+        
+        .neutral-bar {
+            background-color: #9E9E9E;
+        }
+        
+        .examples {
+            margin-top: 30px;
+        }
+        
+        .example-tweet {
+            cursor: pointer;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .example-tweet:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <h1>Twitter Sentiment Analyzer</h1>
+    
+    <div class="container">
+        <h2>Enter a Tweet</h2>
+        <textarea id="tweet-input" placeholder="Type or paste a tweet here..."></textarea>
+        <button onclick="analyzeSentiment()">Analyze Sentiment</button>
+        
+        <div id="result" class="result">
+            <h3>Sentiment Analysis Result</h3>
+            <p><strong>Sentiment: </strong><span id="sentiment-result"></span></p>
+            
+            <h4>Sentiment Scores:</h4>
+            <div>
+                <span class="score-label">Positive:</span>
+                <div class="score-bar positive-bar" id="positive-bar">
+                    <span class="score-value" id="positive-score">0.0</span>
+                </div>
+            </div>
+            <div>
+                <span class="score-label">Negative:</span>
+                <div class="score-bar negative-bar" id="negative-bar">
+                    <span class="score-value" id="negative-score">0.0</span>
+                </div>
+            </div>
+            <div>
+                <span class="score-label">Neutral:</span>
+                <div class="score-bar neutral-bar" id="neutral-bar">
+                    <span class="score-value" id="neutral-score">0.0</span>
+                </div>
+            </div>
+            <div>
+                <span class="score-label">Compound:</span>
+                <span id="compound-score">0.0</span> (Overall sentiment score)
+            </div>
+        </div>
+    </div>
+    
+    <div class="examples">
+        <h3>Example Tweets</h3>
+        <p>Click on an example to analyze it:</p>
+        <div class="example-tweet" onclick="setExampleTweet(this)">I love this new feature! It's amazing and works perfectly.</div>
+        <div class="example-tweet" onclick="setExampleTweet(this)">This is the worst service I've ever experienced. Terrible customer support.</div>
+        <div class="example-tweet" onclick="setExampleTweet(this)">The weather is cloudy today. Might rain later.</div>
+        <div class="example-tweet" onclick="setExampleTweet(this)">Just upgraded my account. Hope it's worth it.</div>
+    </div>
+    
+    <script>
+        // In a real application, this would call a backend API that runs the Python code
+        // For this demo, we'll simulate the sentiment analysis with JavaScript
+        
+        function analyzeSentiment() {
+            const tweetText = document.getElementById('tweet-input').value.trim();
+            
+            if (!tweetText) {
+                alert('Please enter a tweet to analyze.');
+                return;
+            }
+            
+            // Simulate calling the Python backend
+            // In a real application, you would make an API call to your Python backend
+            simulateSentimentAnalysis(tweetText);
+        }
+        
+        function simulateSentimentAnalysis(tweet) {
+            // This is a simplified simulation of sentiment analysis
+            // In a real application, this would be handled by the Python backend
+            
+            // Simple word-based sentiment analysis for demonstration
+            const positiveWords = ['good', 'great', 'excellent', 'amazing', 'love', 'happy', 'best', 'perfect', 'awesome'];
+            const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor', 'horrible', 'disappointed', 'sucks'];
+            
+            const words = tweet.toLowerCase().match(/\b(\w+)\b/g) || [];
+            
+            let positiveCount = 0;
+            let negativeCount = 0;
+            
+            words.forEach(word => {
+                if (positiveWords.includes(word)) positiveCount++;
+                if (negativeWords.includes(word)) negativeCount++;
+            });
+            
+            const totalWords = words.length;
+            const positiveScore = positiveCount / Math.max(totalWords, 1);
+            const negativeScore = negativeCount / Math.max(totalWords, 1);
+            const neutralScore = 1 - (positiveScore + negativeScore);
+            const compoundScore = positiveScore - negativeScore;
+            
+            let sentiment;
+            if (compoundScore >= 0.05) {
+                sentiment = "Positive";
+            } else if (compoundScore <= -0.05) {
+                sentiment = "Negative";
+            } else {
+                sentiment = "Neutral";
+            }
+            
+            // Display the results
+            displayResults({
+                sentiment: sentiment,
+                scores: {
+                    positive: positiveScore,
+                    negative: negativeScore,
+                    neutral: neutralScore,
+                    compound: compoundScore
+                }
+            });
+        }
+        
+        function displayResults(result) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            
+            // Remove previous sentiment classes
+            resultDiv.classList.remove('positive', 'negative', 'neutral');
+            
+            // Add appropriate sentiment class
+            resultDiv.classList.add(result.sentiment.toLowerCase());
+            
+            // Update sentiment text
+            document.getElementById('sentiment-result').textContent = result.sentiment;
+            
+            // Update score bars
+            const positiveBar = document.getElementById('positive-bar');
+            const negativeBar = document.getElementById('negative-bar');
+            const neutralBar = document.getElementById('neutral-bar');
+            
+            positiveBar.style.width = `${result.scores.positive * 100}%`;
+            negativeBar.style.width = `${result.scores.negative * 100}%`;
+            neutralBar.style.width = `${result.scores.neutral * 100}%`;
+            
+            // Update score values
+            document.getElementById('positive-score').textContent = result.scores.positive.toFixed(3);
+            document.getElementById('negative-score').textContent = result.scores.negative.toFixed(3);
+            document.getElementById('neutral-score').textContent = result.scores.neutral.toFixed(3);
+            document.getElementById('compound-score').textContent = result.scores.compound.toFixed(3);
+        }
+        
+        function setExampleTweet(element) {
+            document.getElementById('tweet-input').value = element.textContent;
+            analyzeSentiment();
+        }
+    </script>
+</body>
+</html>
